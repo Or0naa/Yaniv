@@ -1,0 +1,58 @@
+@import '../../index.scss';
+
+.playerCard {
+    @extend .card;
+    cursor: default;
+    // background: linear-gradient(to bottom, #fff 0%, var(--blue-color) 100%);
+}
+
+.upImg {
+    width: 30%;
+    max-height: 30%;
+    object-fit: cover;
+    position: absolute;
+    border-radius: 50%;
+    top: 3%;
+    left: 3%;
+}
+
+.upName {
+    position: absolute;
+    top: 70%;
+    font-size: 20px;
+    z-index: 1;
+    color: #000;
+    text-shadow: 3px 3px 3px var(--light-blue-color);
+}
+
+
+
+.main {
+    @extend .center;
+
+}
+
+.img {
+    width: 60%;
+    aspect-ratio: 1/1.5;
+    object-fit: cover;
+    object-position: top;
+    filter: drop-shadow(0px 0px 3px var(--light-blue-color));
+}
+
+.count {
+    position: absolute;
+    bottom: 5%;
+    font-size: 16px;
+}
+
+@media screen and (max-width: 400px) {
+    .upName {
+        font-size: 10px;
+        text-shadow: 1px 1px 1px var(--light-blue-color);
+    }
+
+    .count {
+        font-size: 8px;
+    }
+}

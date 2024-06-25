@@ -1,0 +1,86 @@
+@import '../../index.scss';
+
+.button {
+    background-color: var(--light-khaki-color);
+    background: linear-gradient(var(--light-khaki-color), var(--khaki-color)) padding-box,
+        linear-gradient(to right, var(--dark-khaki-color), var(--khaki-color), var(--dark-khaki-color), var(--dark-khaki-color), var(--khaki-color), var(--khaki-color)) border-box;
+    border: 2px solid transparent;
+    box-shadow: 0 3px 0 var(--dark-khaki-color);
+    transition: background-color 0.5s, box-shadow 0.5s; // Add smooth transition
+}
+
+.button,
+.clicked {
+    @extend .center;
+    width: 10%;
+    padding: 5px;
+    height: 10%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    & > img {
+        width: 100%;
+    }
+}
+
+.clicked {
+    cursor: pointer;
+    background: linear-gradient(var(--gold), var(--light-shadow), var(--gold), var(--dark-shadow)) padding-box,
+        linear-gradient(to right, var(--gold), var(--dark-shadow), var(--gold), var(--light-shadow), var(--gold), var(--dark-shadow)) border-box;
+    border: 2px solid transparent;
+    box-shadow: 0 7px 0 var(--gold);
+    animation: rotateBorder 5s linear infinite, moveShadow 5s linear infinite, changeColor 5s linear infinite;
+}
+
+@keyframes rotateBorder {
+    0% {
+        background-position: 0% 50%;
+    }
+    20% {
+        background-position: 20% 50%;
+    }
+    40% {
+        background-position: 40% 50%;
+    }
+    60% {
+        background-position: 60% 50%;
+    }
+    80% {
+        background-position: 80% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes moveShadow {
+    0%, 20% {
+        box-shadow: 0 7px 0 var(--light-shadow);
+    }
+    40% {
+        box-shadow: 0 7px 0 var(--dark-shadow);
+    }
+    60% {
+        box-shadow: 0 7px 0 var(--light-shadow);
+    }
+    80% {
+        box-shadow: 0 7px 0 var(--dark-shadow);
+    }
+    100% {
+        box-shadow: 0 7px 0 var(--light-shadow);
+    }
+}
+
+@keyframes changeColor {
+    0%, 100% {
+        background-color: var(--gold);
+    }
+    25% {
+        background-color: var(--light-shadow);
+    }
+    50% {
+        background-color: var(--dark-shadow);
+    }
+    75% {
+        background-color: var(--light-shadow);
+    }
+}

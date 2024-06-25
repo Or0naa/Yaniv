@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Gluten:wght@700&display=swap");
+
+html,
+body {
+  height: 100%;
+
+}
+
+:root {
+  --blue-color: #0583F2;
+  --light-blue-color: #72c1f2;
+  --dark-blue-color: #0569C2;
+  --khaki-color: #415936;
+  --dark-khaki-color: #1a2614;
+  --light-khaki-color: #B0BF8E;
+  --sand-color: #D9C3A9;
+  --light-sand-color: #efefed;
+  --blue-green: #5494a4;
+  --green-khaki: #94a484;
+    --gold: #ffb338;
+  --light-shadow: #77571d;
+  --dark-shadow: #3e2904;
+}
+
+* {
+  font-family: "Gluten", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.App {
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.onlyText {
+  color: var(--sand-color);
+  -webkit-text-stroke: 1px #000;
+}
+
+.borderBold {
+  border: none;
+  border-bottom: 4px solid var(--khaki-color);
+  box-shadow: 0 7px 0 var(--dark-khaki-color);
+  background-color: var(--light-khaki-color);
+  border-radius: 30px;
+  padding: 15px;
+
+}
+
+.bigButtom {
+  @extend .borderBold;
+  color: #fff;
+  -webkit-text-stroke: 2px var(--dark-khaki-color);
+  font-size: 25px;
+  text-shadow: 2px 3px 0px var(--khaki-color);
+}
+
+.bigButtom:hover {
+  background-color: var(--khaki-color);
+  text-shadow: 2px 3px 0px #000;
+
+}
+
+.card {
+  width: 6rem;
+  min-width: 90px;
+  height: 10rem;
+  border-radius: 20px;
+  border: 2px solid #b1b1b1;
+  box-shadow: 2px 2px 10px #000;
+  @extend .center;
+  background-color: var(--light-sand-color);
+  position: relative;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+.card{
+  width: 3rem;
+  min-width: 50px;
+  height: 5rem;
+  border-radius: 10px;
+
+}  
+}

@@ -1,0 +1,73 @@
+@import '../../index.scss';
+
+
+.card {
+
+    @extend .card;
+    font-size: 5rem;
+
+
+
+    .up {
+        width: 20%;
+        max-height: 20%;
+        object-fit: cover;
+        position: absolute;
+        top: 7%;
+        left: 7%;
+
+    }
+
+    .big {
+        width: 70%;
+        filter: drop-shadow(0 0 10px #690707);
+    }
+
+
+    .imgUp {
+        top: 5%;
+        left: 5%;
+    }
+
+    .imgUp,
+    .imgDown {
+        width: 30%;
+        max-height: 30%;
+        object-fit: cover;
+        position: absolute;
+    }
+
+    .imgDown {
+
+        bottom: 5%;
+        right: 5%;
+        transform: rotate(180deg);
+
+    }
+
+    .value {
+        text-shadow: 2px 2px var(--sand-color);
+
+    }
+
+    .points {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.7);
+        @extend .card;
+        opacity: 0;
+        transition: opacity 0.2s;
+        color: (var(--light-sand-color));
+    }
+}
+
+.card:hover .points {
+    opacity: 1;
+}
+
+@media screen and (max-width: 400px) {
+    .card {
+        font-size: 3rem;
+    }
+
+
+}

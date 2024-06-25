@@ -1,0 +1,77 @@
+@import '../../fonts.css';
+@import '../../index.scss';
+
+
+.wrapper {
+  display: grid;
+  grid-template-areas: 'overlap';
+  place-content: center;
+  text-transform: uppercase;
+}
+
+.wrapper>div {
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-weight: 900;
+  font-family: 'noot', sans-serif;
+  font-size: clamp(3em, 18vw, 15rem);
+  grid-area: overlap;
+  letter-spacing: 1px;
+  -webkit-text-stroke: 4px transparent;
+}
+
+div.bg {
+  background-image: repeating-linear-gradient(105deg,
+      var(--gold) 0%,
+      var(--dark-shadow) 5%,
+      var(--gold) 12%);
+  color: transparent;
+  filter: drop-shadow(5px 15px 15px black);
+  transform: scaleY(1.05);
+  transform-origin: top;
+}
+
+div.fg {
+  background-image: repeating-linear-gradient(5deg,
+      var(--gold) 0%,
+      var(--light-shadow) 23%,
+      var(--gold) 31%);
+  color: var(--dark-shadow);
+  transform: scale(1);
+}
+
+
+@keyframes rotateBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.logo {
+  display: inline-block;
+  padding: 7%;
+  position: relative;
+  overflow: hidden;
+  /* כדי שהילדים לא יגלשו */
+}
+
+.logo-border {
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--sand-color), #5f9ea0, var(--sand-color));
+  background-size: 200% 200%;
+  animation: rotateBorder 5s linear infinite;
+  display: inline-block;
+}
+
+.logo img {
+  display: block;
+  border-radius: 0;
+  /* מבטיח שהתמונה עצמה לא תהיה מעוגלת */
+  max-width: 100%;
+  filter: drop-shadow(0px 0px 10px #5f9ea0);
+}

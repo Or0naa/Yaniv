@@ -1,0 +1,49 @@
+.instructions_container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h2 {
+    text-align: center;
+    // color: #333;
+  }
+  
+  // button {
+  //   display: block;
+  //   margin: 20px auto;
+  //   padding: 10px 20px;
+  //   background-color: #4CAF50;
+  //   color: white;
+  //   border: none;
+  //   border-radius: 5px;
+  //   cursor: pointer;
+  //   font-size: 16px;
+  // }
+  
+  // button:hover {
+  //   background-color: #45a049;
+  // }
+  
+  .rules_list {
+    display: grid;
+    gap: 20px;
+  }
+  
+  .rule_item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+  }
+  
+  .rule_item h3 {
+    margin-top: 0;
+    color: #2c3e50;
+  }
+  
+  .rule_item p {
+    margin-bottom: 0;
+    color: #34495e;
+  }

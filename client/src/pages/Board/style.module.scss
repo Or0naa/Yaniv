@@ -1,0 +1,55 @@
+@import '../../index.scss';
+
+.container {
+  padding: 15%;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+
+
+.myCards {
+  @extend .center;
+  flex-direction: row;
+  gap: 1em;
+  // background-color: #ffffff6f;
+}
+
+.gameTable {
+  @extend .center;
+  flex-direction: row;
+
+  gap: 20%;
+}
+
+.deck {
+  position: relative;
+  width: 100px; // Adjust the width as needed
+  height: 150px; // Adjust the height as needed
+}
+
+.openCards {
+  position: relative;
+  font-size: 50px;
+}
+
+.card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: translate(calc((random() - 0.5) * 10px),
+      calc((random() - 0.5) * 10px)) rotate(calc((random() - 0.5) * 10deg));
+}
+
+.userCard {
+  transition: margin-bottom 0.3s ease;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+  .deck {
+    width: 50px;
+    height: 75px;
+  }
+}

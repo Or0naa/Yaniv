@@ -1,0 +1,31 @@
+@import '../../index.scss';
+
+.container {
+  @extend .center;
+  flex-direction: column;
+  align-items: center;
+  padding: 2em;
+  background-color: #1d1d1d3d;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  // max-width: 500px;
+  margin: 0 auto;
+
+  & > div {
+    margin: 1em 0;
+    text-align: center;
+    font-size: 1.2em;
+    color: #000000;
+  }
+
+  .shareButton {
+    margin: 0.5em;
+
+    img {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
