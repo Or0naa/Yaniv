@@ -1,7 +1,6 @@
 @import '../../index.scss';
 
 .container {
-  padding: 15%;
   display: flex;
   flex-direction: column;
   gap: 5rem;
@@ -45,6 +44,18 @@
 .userCard {
   transition: margin-bottom 0.3s ease;
   cursor: pointer;
+}
+
+.lastCard {
+  @extend .center;
+  flex-direction: row;
+  gap: 10%;
+  z-index: 3000;
+  position: relative;
+}
+
+.notYet {
+  opacity: 0;
 }
 
 @media screen and (max-width: 400px) {

@@ -4,6 +4,7 @@ import style from './style.module.scss';
 
 export default function CardView({ value, suit }) {
 
+
     const [imgSuit, setImgSuit] = useState('')
     const [imgValue, setImgValue] = useState('')
     const [points, setPoints] = useState(0)
@@ -11,7 +12,7 @@ export default function CardView({ value, suit }) {
         setImgSuit(suit === "♣" ? "./clover.png" : suit === "♥" ? "./heart.png" : suit === "♦" ? "./diamond.png" : "./leaf.png")
         setImgValue(value == "1" ? "A" : value == "11" ? "./j.png" : value == "12" ? "./q.png" : value == "13" ? "./k.png" : value)
         setPoints(value == "Joker" ? 0 : value == "11" ? 10 : value == "12" ? 10 : value == "13" ? 10 : Number(value))
-    }, [])
+    }, [suit, value])
 
     if (suit === "Joker") {
         return (
