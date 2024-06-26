@@ -44,61 +44,62 @@ export const useGameStore = create((set, get) => ({
         let newCards = [...cards];
         newCards.sort(() => Math.random() - 0.5);
         let players = [user];
-        let userCards = newCards.slice(0, 5)
+        let userCards = newCards.slice(0, 5);
         newCards = newCards.slice(5);
+    
         if (saruf(userCards)) {
-            let replacement = []
+            let replacement = [];
             while (replacement.length < 5) {
-                let card = newCards.shift()
+                let card = newCards.shift();
                 if (!saruf([...replacement, card])) {
-                    replacement.push(card)
-                }
-                else {
-                    newCards.push(card)
+                    replacement.push(card);
+                } else {
+                    newCards.push(card);
                 }
             }
-            userCards = [...replacement]
+            userCards = [...replacement];
         }
+    
         players[0].userCards = userCards;
+    
         let newGame = {
             deck: newCards,
             players: players,
             openCards: [],
             startGame: false,
-        }
+            type: "friend",
+        };
+    
         if (game.type === "computer") {
             set({ game: newGame });
         } else if (game.type === "friend") {
             socket.emit('game:create-room', newGame, user);
-            socket.on('roomCreated', (roomID) => {
-                console.log('Room created', roomID);
-                set({ game: { ...newGame, roomId: roomID } });
+            socket.on('roomCreated', (roomID, players) => {
+                set({ game: { ...newGame, roomId: roomID, players: players } });
             });
+    
             socket.on('game:join-success', (room) => {
-                console.log('game:join-success', room);
-                setGame({ ...room.game, players: room.players });
-                useUserStore.getState().setUser({ ...user, isHost: true, socketId: room.players[0].socketId });
+                const updatedPlayers = room.players.map(p =>
+                    p.id === user.id ? user : p
+                );
+                setGame({ ...room.game, players: updatedPlayers });
+                // useUserStore.getState().setUser({ ...user, isHost: true });
             });
-
         }
     },
+    
     joinGame: (roomId, user) => {
-        console.log(roomId, user);
         const setGame = get().setGame;
         const setUser = useUserStore.getState().setUser;
-
+    
         socket.emit('game:join-room', roomId, user);
-
+    
         socket.off('game:join-success');
         socket.on('game:join-success', (room) => {
-            console.log("room: ", room);
-
-            // יצירת עותק עמוק של מצב המשחק
-            let updatedGame = JSON.parse(JSON.stringify(room.game));
-
+            let updatedGame = room.game;
             let userCards = updatedGame.deck.slice(0, 5);
             updatedGame.deck = updatedGame.deck.slice(5);
-
+    
             if (saruf(userCards)) {
                 let replacement = [];
                 while (replacement.length < 5) {
@@ -111,43 +112,23 @@ export const useGameStore = create((set, get) => ({
                 }
                 userCards = [...replacement];
             }
-
-            // עדכון המשתמש עם הקלפים החדשים והשמירה של ה-socketId
-            const updatedUser = { ...user, userCards, socketId: socket.id, id: socket.id };
-            setUser(updatedUser);
-
-            // עדכון רשימת השחקנים
-            const updatedPlayers = updatedGame.players.map(p =>
-                p.socketId === updatedUser.id ? updatedUser : p
-            );
-
-            // אם השחקן לא נמצא ברשימה, נוסיף אותו
-            if (!updatedPlayers.some(p => p.id === updatedUser.id)) {
-                updatedPlayers.push(updatedUser);
-            }
-
-            updatedGame = {
-                ...updatedGame,
-                roomId: roomId,
-                players: updatedPlayers,
-            };
-
-            setGame(updatedGame);
-
-            // שליחת העדכון לשרת
-            socket.emit('move', roomId, updatedGame);
+    
+            setUser({ ...user, userCards, id: socket.id });
+            setGame({ ...updatedGame, roomId: roomId, players: room.players });
         });
-
+    
         socket.on('roomFull', () => {
             console.log('roomFull');
         });
     },
+    
     startGame: () => {
         const game = get().game;
         const newDeck = game.deck
         let card = newDeck.shift()
         const turn = Math.floor(Math.random() * game.players.length);
-        const start = { ...game, deck: newDeck, openCards: [card], startGame: true, currentPlayer: turn, lastCard:[card] }
+        const start = { ...game, deck: newDeck, openCards: [card], startGame: true, currentPlayer: turn, lastCard: [card] }
+        console.log({start})
         socket.emit('move', game.roomId, start)
     },
     updateGame: (data) => {
@@ -176,13 +157,66 @@ export const useGameStore = create((set, get) => ({
                 }
             }));
 
-            // Update the user's sign based on the new player list
-            const updatedUser = playerList.find(player => player.socketId === user.socketId);
+            const updatedUser = playerList.find(player => player.id === user.id);
             if (updatedUser) {
-                setUser({ ...user, sign: updatedUser.sign });
+                setUser(updatedUser);
             }
         });
     },
+    declareYaniv: (playerId) => {
+        const game = get().game;
+        const players = game.players;
+        const declaringPlayer = players.find(p => p.id === playerId);
+        const declaringPlayerScore = declaringPlayer.userCards.reduce((sum, card) => sum + card.value, 0);
+        
+        let winner = declaringPlayer;
+        let isAsaf = false;
+    
+        players.forEach(player => {
+          if (player.id !== playerId) {
+            const playerScore = player.userCards.reduce((sum, card) => sum + card.value, 0);
+            if (playerScore <= declaringPlayerScore) {
+              winner = player;
+              isAsaf = true;
+            }
+          }
+        });
+    
+        if (isAsaf) {
+          // אסף
+          declaringPlayer.score += 30 + declaringPlayerScore;
+        } else {
+          // יניב
+          players.forEach(player => {
+            if (player.id !== playerId) {
+              player.score += player.userCards.reduce((sum, card) => sum + card.value, 0);
+            }
+          });
+        }
+    
+        // עדכון הניקוד
+        players.forEach(player => {
+          if (player.score >= 100) {
+            // סיום המשחק
+            set({ gameOver: true, winner: player });
+          } else if (player.score >= 50 && player.score < 75) {
+            player.score = 25;
+          } else if (player.score >= 100 && player.score < 125) {
+            player.score = 50;
+          }
+        });
+    
+        // התחלת סיבוב חדש
+        const newGame = startNewRound(game);
+        set({ game: newGame });
+        socket.emit('move', game.roomId, newGame);
+      },
+    
+      startNewRound: (game) => {
+        // לוגיקה לחלוקת קלפים חדשים וכו'
+        // ...
+        return newGame;
+      },
 }));
 
 const saruf = (cards) => {
@@ -200,5 +234,19 @@ const saruf = (cards) => {
             }
     }
     return false;
+}
+
+const rePlaceCards = (deck) => {
+    let replacement = [];
+    while (replacement.length < 5) {
+        let card = deck.shift();
+        if (!saruf([...replacement, card])) {
+            replacement.push(card);
+        } else {
+            updatedGame.deck.push(card);
+        }
+    }
+    userCards = [...replacement];
+    return (userCards, deck)
 }
 

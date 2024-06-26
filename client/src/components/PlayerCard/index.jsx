@@ -20,7 +20,6 @@ export default function PlayerCard({ name, image, count, wins }) {
     return (
         <div className={style.playerCard}>
             <img className={style.upImg} src={image} alt={name} />
-            <div className={style.upName}>{name}</div>
             <div dir='auto' className={style.main}>
                 <img
                     // style={{ backgroundColor: bgColor, border: `4px solid ${borderColor}` }}
@@ -28,6 +27,7 @@ export default function PlayerCard({ name, image, count, wins }) {
                     src={image}
                     alt={name}
                 />
+                <div className={style.upName}>{name}</div>
                 <div className={style.count}>{count} points</div>
             </div>
         </div>

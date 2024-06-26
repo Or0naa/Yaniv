@@ -31,18 +31,21 @@ export default function ChoosePlayer() {
   const game = useGameStore(state => state.game);
   const setGame = useGameStore(state => state.setGame);
   const handlePlayersUpdate = useGameStore(state => state.handlePlayersUpdate);
-  const [avatar, setAvatar] = useState(user.avatar || './boy3.png');
+  const [image, setImage] = useState(user.image || './boy3.png');
   const [name, setName] = useState(user.name || "player");
 
+  console.log({user})
+
   const handleUpdateUser = () => {
-    const updatedUser = { ...user, name: name, image: avatar };
+    const updatedUser = { ...user, name: name, image: image };
     setUser(updatedUser);
     console.log({ updatedUser })
 
     if (game.type === "friend" && game.roomId) {
       const playersToUpdate = game.players.map(player =>
-        player.socketId === user.socketId ? { ...player, name, avatar } : player
+        player.id === user.id ? updatedUser : player
       );
+      console.log({ playersToUpdate })
       handlePlayersUpdate(game.roomId, playersToUpdate);
       nav('/game');
     } else if (game.type === "computer") {
@@ -78,8 +81,8 @@ export default function ChoosePlayer() {
                 key={index}
                 src={avatarSrc}
                 alt={`Avatar ${index + 1}`}
-                onClick={() => setAvatar(avatarSrc)}
-                className={avatar === avatarSrc ? style.selected : ''}
+                onClick={() => setImage(avatarSrc)}
+                className={image === avatarSrc ? style.selected : ''}
               />
             ))}
           </div>

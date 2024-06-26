@@ -11,7 +11,6 @@ const server = createServer(app);
 const io = new Server(server, { cors: { origin: '*', methods: '*' } });
 
 const rooms = {};
-const players = [];
 
 function getCurrentBackgroundImage() {
     const currentHour = new Date().getHours();
@@ -35,37 +34,33 @@ io.on('connection', (socket) => {
     socket.on('game:create-room', (game, userData) => {
         const newRoomId = generateRoomNumber();
         const newRoom = {
-            game: game,
+            game,
             players: [
                 {
-                    socketId: socket.id,
+                    id: socket.id,
                     ...userData
                 }
             ]
-        }
-        console.log(newRoom.players[0])
+        };
         rooms[newRoomId] = newRoom;
         socket.join(newRoomId);
-        console.log(`${userData.name} created room ${newRoomId}`);
-        const id = socket.id
-
-        socket.emit('roomCreated', newRoomId, players);
-        io.to(id).emit('userId', id);
+        socket.emit('roomCreated', newRoomId, newRoom.players);
+        io.to(newRoomId).emit('updatePlayerList', newRoom.players); // Broadcast the players list to the room
+        socket.emit('userId', socket.id);
     });
+    
 
     socket.on('game:join-room', (roomId, userData) => {
-        console.log(`Joining room ${roomId}`);
         const room = rooms[roomId];
-        console.log({ room })
         if (room && room.players.length < 4) {
-            room.players.push({
-                socketId: socket.id,
-                ...userData
-            });
-            room.game.roomId = roomId;
+            const newPlayer = {
+                ...userData,
+                id: socket.id
+            };
+            room.players.push(newPlayer); // Push the new player into the players array
             socket.join(roomId);
-            console.log(`${userData.name} joined room ${roomId}`);
             io.to(roomId).emit('game:join-success', room);
+            io.to(roomId).emit('updatePlayerList', room.players); // Update the players list for everyone in the room
         } else {
             socket.emit('roomFull');
         }
@@ -82,20 +77,19 @@ io.on('connection', (socket) => {
             }
         }
     });
-
     socket.on('updatePlayerList', (roomId, playerList) => {
         const room = rooms[roomId];
-        console.log(room)
-        console.log('updatePlayerList', playerList, roomId);
-        io.to(roomId).emit('updatePlayerList', playerList);
+        if (room) {
+            console.log({playerList})
+            room.players = playerList; // עדכון רשימת השחקנים בחדר
+            console.log("updatePlayerList", room.players);
+            io.to(roomId).emit('updatePlayerList', playerList);
+        }
     });
+    
 
     socket.on('disconnect', () => {
-        const index = players.findIndex(player => player.id === socket.id);
-        if (index !== -1) {
-            players.splice(index, 1);
-            io.to(roomID).emit('playerDisconnect', players);
-        }
+    console.log("player disconnect")
     });
 });
 

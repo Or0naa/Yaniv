@@ -58,6 +58,15 @@
   opacity: 0;
 }
 
+.player2 {
+  position: relative;
+  width: max-content;
+}
+
+.opponentCard {
+  position: absolute;
+}
+
 @media screen and (max-width: 400px) {
   .deck {
     width: 50px;
