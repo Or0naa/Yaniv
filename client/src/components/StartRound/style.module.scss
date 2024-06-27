@@ -1,0 +1,19 @@
+@import '../../index.scss'; 
+
+.inRound {
+display: none;
+}
+
+.startRound{
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    @extend .center;
+    background-color: #02020233;
+    backdrop-filter: blur(10px);
+}
+
+.cards{
+    @extend .center;
+    flex-direction: row;
+}

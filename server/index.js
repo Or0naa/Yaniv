@@ -21,7 +21,6 @@ function getCurrentBackgroundImage() {
 function sendBackgroundUpdate() {
     const imageUrl = getCurrentBackgroundImage();
     io.emit('backgroundUpdate', imageUrl);
-    console.log(`Sent background update: ${imageUrl}`);
 }
 
 // תזמון עדכון הרקע בכל שעה עגולה
@@ -45,7 +44,6 @@ io.on('connection', (socket) => {
         rooms[newRoomId] = newRoom;
         socket.join(newRoomId);
         socket.emit('roomCreated', newRoomId, newRoom.players);
-        io.to(newRoomId).emit('updatePlayerList', newRoom.players); // Broadcast the players list to the room
         socket.emit('userId', socket.id);
     });
     
@@ -60,29 +58,24 @@ io.on('connection', (socket) => {
             room.players.push(newPlayer); // Push the new player into the players array
             socket.join(roomId);
             io.to(roomId).emit('game:join-success', room);
-            io.to(roomId).emit('updatePlayerList', room.players); // Update the players list for everyone in the room
         } else {
             socket.emit('roomFull');
         }
     });
 
     socket.on('move', (roomId, game) => {
-        console.log("move", roomId, game);
         const room = rooms[roomId];
+        console.log({room})
         if (room) {
             room.game = game;
+            room.players = game.players; // עדכון רשימת השחקנים בחדר
             io.to(roomId).emit('updateBoard', game);
-            if (game.winner) {
-                io.to(roomId).emit('game:end', game.winner);
-            }
         }
     });
     socket.on('updatePlayerList', (roomId, playerList) => {
         const room = rooms[roomId];
         if (room) {
-            console.log({playerList})
             room.players = playerList; // עדכון רשימת השחקנים בחדר
-            console.log("updatePlayerList", room.players);
             io.to(roomId).emit('updatePlayerList', playerList);
         }
     });

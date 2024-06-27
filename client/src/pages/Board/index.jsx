@@ -6,6 +6,7 @@ import CardView from '../../components/CardView';
 import PlayerCard from '../../components/PlayerCard';
 import Yaniv from '../../components/Yaniv';
 import BackCard from '../../components/BackCard';
+import StartRound from '../../components/StartRound';
 
 export default function Board() {
   const game = useGameStore(state => state.game);
@@ -21,31 +22,38 @@ export default function Board() {
   const [myCards, setMyCards] = useState([]);
   const [otherPlayers, setOtherPlayers] = useState([]);
   const [takeCard, setTakeCard] = useState(false);
+  const [isMe, setIsMe] = useState({})
 
   useEffect(() => {
-    const calculationPoint = user.userCards.reduce((acc, card) => acc + card.value, 0);
+    const updatePlayer = game.players.find(p => p.id === user.id)
+
+    const calculationPoint = updatePlayer.userCards.reduce((acc, card) => acc + card.value, 0);
     setCurrentPoint(calculationPoint);
     setIsYaniv(calculationPoint <= 7);
-    setOtherPlayers(game.players.filter(p => p.id !== user.id));
-    setMyCards(user.userCards);
+    setOtherPlayers(game.players.filter(p => p.id !== updatePlayer.id));
+    setMyCards(updatePlayer.userCards);
+    setIsMe(updatePlayer)
+
   }, [user, game]);
+
+  console.log({ chosenCards, })
 
   const handleChooseCard = (card) => {
     setChosenCards((prev) => {
       if (prev.includes(card)) {
         return prev.filter(c => c !== card);
       }
-  
+
       const sameNumber = prev.every(c => c.number === card.number || c.number === "Joker");
       if (sameNumber) {
         return [...prev, card];
       }
-  
+
       const sameSuit = prev.every(c => c.suit === card.suit || c.suit === "Joker");
       if (sameSuit) {
         const cardNumbers = prev.map(c => c.number).concat(card.number).filter(n => n !== "Joker");
         const uniqueNumbers = [...new Set(cardNumbers)].sort((a, b) => a - b);
-        
+
         const isConsecutiveWithJoker = (numbers) => {
           let jokerCount = prev.filter(c => c.number === "Joker").length + (card.number === "Joker" ? 1 : 0);
           for (let i = 1; i < numbers.length; i++) {
@@ -60,38 +68,47 @@ export default function Board() {
           }
           return true;
         };
-  
+
         if (isConsecutiveWithJoker(uniqueNumbers)) {
           return [...prev, card];
         }
       }
-  
+
       return [card];
     });
   };
-
   const handleYaniv = () => {
-    if (!isYaniv || game.currentPlayer !== game.players.findIndex(p => p.id === user.id)) {
+    if (!isYaniv || game.currentPlayer !== game.players.findIndex(p => p.id === isMe.id)) {
       return;
     }
-    declareYaniv(user.id);
+    declareYaniv(isMe.id);
   };
-
   const handleStart = () => {
-    startGame();
+    startGame(game);
   };
-
   const handlePopup = () => {
     openPopup(<div>הסברים</div>);
   };
 
   const handlePlaceCards = () => {
-    if (chosenCards.length < 1 || game.currentPlayer !== game.players.findIndex(p => p.id === user.id)) {
+    if (chosenCards.length < 1 || game.currentPlayer !== game.players.findIndex(p => p.id === isMe.id)) {
       return;
     }
+    if (chosenCards.length>1){
+      if (chosenCards[0].number !== chosenCards[1].number && chosenCards.length<3) {
+        return;
+      }
+      if (chosenCards[0].number==chosenCards[1].number){
+        setQuickPlayCard(chosenCards[0].number);
+      }
+    }
+    if (chosenCards.length === 1) {
+      setQuickPlayCard(chosenCards[0].number);
+    }
+
     const gameToUpdate = { ...game };
     gameToUpdate.openCards = [...gameToUpdate.openCards, ...chosenCards];
-    const userToUpdate = { ...user };
+    const userToUpdate = { ...isMe };
     const leftCards = userToUpdate.userCards.filter(card => !chosenCards.includes(card));
     userToUpdate.userCards = leftCards;
     gameToUpdate.players = gameToUpdate.players.map(p => p.id === userToUpdate.id ? userToUpdate : p);
@@ -102,12 +119,12 @@ export default function Board() {
   };
 
   const handleTakeCard = (card, from) => {
-    if (!takeCard || game.currentPlayer !== game.players.findIndex(p => p.id === user.id)) {
+    if (!takeCard || game.currentPlayer !== game.players.findIndex(p => p.id === isMe.id)) {
       return;
     }
     let turn = (game.currentPlayer + 1) % game.players.length;
     const gameToUpdate = { ...game, currentPlayer: turn };
-    
+
     if (from === "deck") {
       const updateDeck = gameToUpdate.deck.filter(c => c !== card);
       gameToUpdate.deck = updateDeck;
@@ -128,12 +145,32 @@ export default function Board() {
     setTakeCard(false);
   };
 
-  const isMyTurn = game.currentPlayer === game.players.findIndex(p => p.id === user.id);
+  const isMyTurn = game.currentPlayer === game.players.findIndex(p => p.id === isMe.id);
+  const [quickPlayCard, setQuickPlayCard] = useState(null);
 
+  const handleQuickPlay = (card) => {
+    console.log("handleQuickPlay", card);
+    console.log({quickPlayCard})
+    if (card.number !== quickPlayCard || game.currentPlayer === game.players.findIndex(p => p.id === isMe.id)+1) {
+      return;
+    }
+
+    const gameToUpdate = { ...game };
+    gameToUpdate.openCards = [...gameToUpdate.openCards, card];
+    gameToUpdate.lastCard.push(card)
+    const userToUpdate = { ...isMe };
+    const leftCards = userToUpdate.userCards.filter(c => c !== card);
+    userToUpdate.userCards = leftCards;
+    gameToUpdate.players = gameToUpdate.players.map(p => p.id === userToUpdate.id ? userToUpdate : p);
+    updateGame(gameToUpdate);
+    setUser(userToUpdate);
+    setMyCards(leftCards);
+    setQuickPlayCard(null);
+  };
   return (
     <div className={style.container}>
       <div>
-        <button onClick={handleStart} disabled={game.startGame}>Start</button>
+        <div onClick={handleStart}><StartRound start={game.startGame}/></div>
         <button onClick={handlePopup}>?</button>
       </div>
       <div className={style.gameTable}>
@@ -178,6 +215,7 @@ export default function Board() {
               key={index}
               className={style.userCard}
               onClick={() => isMyTurn && !takeCard && handleChooseCard(card)}
+              onDoubleClick={() => handleQuickPlay(card)}
               style={{ marginBottom: chosenCards.includes(card) ? '20px' : '0px' }}
             >
               <CardView value={card.number} suit={card.suit} />
@@ -186,21 +224,21 @@ export default function Board() {
         </div>
         <div>מספר הנקודות כרגע: {currentPoint}</div>
         <div>מספר הנקודות בקלפים שנבחרו: {chosenCards.reduce((acc, card) => acc + card.value, 0)}</div>
-        <PlayerCard image={user.image} name={user.name} />
+        <PlayerCard image={isMe.image} name={isMe.name} score={isMe.score} />
 
         <div onClick={handleYaniv} className={isYaniv && isMyTurn ? style.yaniv : style.yanivDisabled}>
-          <Yaniv click={isYaniv && isMyTurn&& !takeCard} />
+          <Yaniv click={isYaniv && isMyTurn && !takeCard} />
         </div>
       </div>
       <div>
-        {otherPlayers&&otherPlayers.map((player, index) => (
+        {otherPlayers && otherPlayers.map((player, index) => (
           <div key={player.id} className={style[`player${index + 2}`]}>
-            {player.userCards&&player.userCards.length > 0 ? (
+            {player.userCards && player.userCards.length > 0 ? (
               player.userCards.slice(0, 5).map((card, cardIndex) => (
                 <div key={cardIndex}
                   style={{ left: `${cardIndex * 10}px` }}
                   className={style.opponentCard}>
-                  <PlayerCard image={player.image} name={player.name} />
+                  <PlayerCard image={player.image} name={player.name} score={isMe.score}  />
                 </div>
               ))
             ) : (

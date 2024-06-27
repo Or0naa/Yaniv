@@ -1,12 +1,13 @@
 import React from 'react';
 import style from './style.module.scss';
-import CardView from '../../components/CardView';
 import { useGameStore } from '../../store';
 import { WhatsappIcon, WhatsappShareButton, EmailIcon, EmailShareButton } from 'react-share';
 import ChoosePlayer from '../ChoosePlayer'
 export default function Waiting() {
   const game = useGameStore(state => state.game);
   const shareText = `Join my game with the code: ${game.roomId}`;
+
+  console.log("id: ", game.roomId)
 
   return (
     <div className={style.container}>

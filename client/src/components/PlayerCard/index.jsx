@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import style from './style.module.scss';
 
-export default function PlayerCard({ name, image, count, wins }) {
+export default function PlayerCard({ name, image, score }) {
     const [bgColor, setBgColor] = useState('');
     const [borderColor, setBorderColor] = useState('');
 
@@ -28,7 +28,7 @@ export default function PlayerCard({ name, image, count, wins }) {
                     alt={name}
                 />
                 <div className={style.upName}>{name}</div>
-                <div className={style.count}>{count} points</div>
+                <div className={style.count}>{score} points</div>
             </div>
         </div>
     );

@@ -29,35 +29,26 @@ export default function ChoosePlayer() {
   const user = useUserStore(state => state.user);
   const setUser = useUserStore(state => state.setUser);
   const game = useGameStore(state => state.game);
-  const setGame = useGameStore(state => state.setGame);
-  const handlePlayersUpdate = useGameStore(state => state.handlePlayersUpdate);
+  const updateGame = useGameStore(state => state.updateGame);
   const [image, setImage] = useState(user.image || './boy3.png');
   const [name, setName] = useState(user.name || "player");
 
-  console.log({user})
-
   const handleUpdateUser = () => {
-    const updatedUser = { ...user, name: name, image: image };
+    const updatedUser = game.players.find(player => player.id === user.id);
+    updatedUser.name = name;
+    updatedUser.image = image;
     setUser(updatedUser);
-    console.log({ updatedUser })
-
-    if (game.type === "friend" && game.roomId) {
-      const playersToUpdate = game.players.map(player =>
-        player.id === user.id ? updatedUser : player
-      );
-      console.log({ playersToUpdate })
-      handlePlayersUpdate(game.roomId, playersToUpdate);
-      nav('/game');
-    } else if (game.type === "computer") {
-      setGame({
-        ...game,
-        players: [
-
-        ]
-      });
-      nav('/game');
-    }
+    const playersToUpdate = game.players.map(player => {
+      if (player.id === user.id) {
+        player.name = name;
+        player.image = image;
+      }
+      return player;
+    });
+    const update = { ...game, players: playersToUpdate };
+    updateGame(update);
     nav('/game');
+
 
   };
 
