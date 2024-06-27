@@ -10,7 +10,7 @@ import { useGameStore, useUserStore } from './store';
 import Logo from './components/Logo';
 
 const App = () => {
-  const [backgroundImage, setBackgroundImage] = useState('');
+  const [backgroundImage, setBackgroundImage] = useState('./14.png');
 
   useEffect(() => {
     socket.on('backgroundUpdate', (newImageUrl) => {
