@@ -36,7 +36,6 @@ export default function Board() {
 
   }, [user, game]);
 
-  console.log({ chosenCards, })
 
   const handleChooseCard = (card) => {
     setChosenCards((prev) => {
@@ -87,18 +86,35 @@ export default function Board() {
     startGame(game);
   };
   const handlePopup = () => {
-    openPopup(<div>הסברים</div>);
+    openPopup(<div dir='rtl'>
+      <h2>איך לשחק?</h2>
+      <p>כשיגיע תורך לבצע מהלך תיפתח האפשרות לבחור קלפים בלחיצה עליהם</p>
+      <p>במקרה של שלישיה יש לבחור את הקלפים לפי מספרים עוקבים</p>
+      <p>בסיום הבחירה ללחוץ על "make move"</p>
+      <p>ומייד אחר כך לקבל קלף בחזרה- או מבין הקלפים שהשחקן לפניך הניח, או קלף חדש מהערימה</p>
+      <p>אם לקחת קלף מהערימה שזהה לקלף שהרגע הנחת-  </p>
+      <p>אפשר לשלוח אותו גם כן בלחיצה כפולה ובתנאי שהשחקן הבא עוד לא ביצע את תורו</p>
+      <p>אם הגיע תורך וגם סכום ערך הקלפים שנשארו לך שווה או קטן מ7 אפשר ללחוץ על כפתור "יניב" ולסיים את הסיבוב</p>
+      <p>ככה נראה כפתור יניב פעיל</p>
+      <Yaniv click={true} />
+      <p>וככה כשאי אפשר להכריז יניב:</p>
+      <Yaniv click={false} />
+      <p>תוכל לראות גם כמה קלפים נשארו לשחקנים האחרים במשחק וככה לתכנן יותר טוב את המהלכים שלך</p>
+      <p>תהנוווו</p>
+
+    </div>)
+
   };
 
   const handlePlaceCards = () => {
     if (chosenCards.length < 1 || game.currentPlayer !== game.players.findIndex(p => p.id === isMe.id)) {
       return;
     }
-    if (chosenCards.length>1){
-      if (chosenCards[0].number !== chosenCards[1].number && chosenCards.length<3) {
+    if (chosenCards.length > 1) {
+      if (chosenCards[0].number !== chosenCards[1].number && chosenCards.length < 3) {
         return;
       }
-      if (chosenCards[0].number==chosenCards[1].number){
+      if (chosenCards[0].number == chosenCards[1].number) {
         setQuickPlayCard(chosenCards[0].number);
       }
     }
@@ -150,8 +166,8 @@ export default function Board() {
 
   const handleQuickPlay = (card) => {
     console.log("handleQuickPlay", card);
-    console.log({quickPlayCard})
-    if (card.number !== quickPlayCard || game.currentPlayer === game.players.findIndex(p => p.id === isMe.id)+1) {
+    console.log({ quickPlayCard })
+    if (card.number !== quickPlayCard || game.currentPlayer === game.players.findIndex(p => p.id === isMe.id) + 1) {
       return;
     }
 
@@ -170,8 +186,8 @@ export default function Board() {
   return (
     <div className={style.container}>
       <div>
-        <div onClick={handleStart}><StartRound start={game.startGame}/></div>
-        <button onClick={handlePopup}>?</button>
+        <div onClick={handleStart}><StartRound start={game.startGame} /></div>
+        <button className={style.help} onClick={handlePopup}>help</button>
       </div>
       <div className={style.gameTable}>
         <div className={style.deck}>
@@ -207,8 +223,22 @@ export default function Board() {
           </div>
         </div>
       </div>
-      <div className={style.user}>
-        <button onClick={handlePlaceCards} disabled={!isMyTurn || takeCard}>Make Move</button>
+      <div onClick={handleYaniv} className={isYaniv && isMyTurn ? style.yaniv : style.yanivDisabled}>
+          <Yaniv click={isYaniv && isMyTurn && !takeCard} />
+        </div>
+      <div className={style.importentButtons}>
+      <button className={style.move} onClick={handlePlaceCards} disabled={!isMyTurn || takeCard}>Make Move</button>
+
+        <div className={style.detailes}>
+          
+          <div>Total points right now: {currentPoint}</div>
+          <div>on selected cards: {chosenCards.reduce((acc, card) => acc + card.value, 0)}</div>
+        </div>
+    
+        <div className={style.isMe}>
+          <PlayerCard image={isMe.image} name={isMe.name} score={isMe.score} />
+        </div>
+      </div>
         <div className={style.myCards}>
           {myCards.map((card, index) => (
             <div
@@ -222,14 +252,7 @@ export default function Board() {
             </div>
           ))}
         </div>
-        <div>מספר הנקודות כרגע: {currentPoint}</div>
-        <div>מספר הנקודות בקלפים שנבחרו: {chosenCards.reduce((acc, card) => acc + card.value, 0)}</div>
-        <PlayerCard image={isMe.image} name={isMe.name} score={isMe.score} />
-
-        <div onClick={handleYaniv} className={isYaniv && isMyTurn ? style.yaniv : style.yanivDisabled}>
-          <Yaniv click={isYaniv && isMyTurn && !takeCard} />
-        </div>
-      </div>
+    
       <div>
         {otherPlayers && otherPlayers.map((player, index) => (
           <div key={player.id} className={style[`player${index + 2}`]}>
@@ -238,7 +261,7 @@ export default function Board() {
                 <div key={cardIndex}
                   style={{ left: `${cardIndex * 10}px` }}
                   className={style.opponentCard}>
-                  <PlayerCard image={player.image} name={player.name} score={isMe.score}  />
+                  <PlayerCard image={player.image} name={player.name} score={player.score} />
                 </div>
               ))
             ) : (

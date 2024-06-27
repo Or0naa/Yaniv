@@ -9,7 +9,7 @@ export default function StartRound({ start = true }) {
     console.log(game.lastGame)
     return (
         <div className={start ? style.inRound : style.startRound}>
-            <div> start a game round</div>
+            <button className={style.button}> start a game round</button>
             {game.lastGame && game.winner && (
                 <div>
                     <div>{game.winner}Won the game</div>

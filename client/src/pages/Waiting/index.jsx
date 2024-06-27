@@ -11,8 +11,10 @@ export default function Waiting() {
 
   return (
     <div className={style.container}>
-      <div>Your code is: {game.roomId}</div>
-      <div>Share:</div>
+      <div>Your code is:
+        <div className={style.code}>{game.roomId}</div> 
+         </div>
+      <div className={style.share}>Share:
       <WhatsappShareButton
         url={window.location.href} //change to website
         title={shareText}
@@ -25,8 +27,9 @@ export default function Waiting() {
         href={`sms:?&body=${encodeURIComponent(shareText)}`}
         className={style.shareButton}
       >
-        <img src="/path/to/sms-icon.png" alt="SMS" style={{ width: 32, height: 32 }} />
+        <img src="./sms.png" alt="SMS" style={{ width: 32, height: 32 }} />
       </a>
+      </div>
       <div>Wait for your friends to join</div>
       <ChoosePlayer/>
     </div>

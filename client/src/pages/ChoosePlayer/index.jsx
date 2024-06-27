@@ -59,12 +59,12 @@ export default function ChoosePlayer() {
 
   return (
     <div className={style.container}>
-      <div>
+      <div className={style.header}>
         <div className={style.title}>Your name</div>
         <div className={style.name}>
           <input type="text" placeholder={name} onChange={e => setName(e.target.value)} />
         </div>
-        <div>
+        <div className={style.images}>
           <div className={style.avatar}>Choose avatar</div>
           <div className={style.avatars} ref={avatarsRef}>
             {avatars.map((avatarSrc, index) => (
@@ -76,9 +76,10 @@ export default function ChoosePlayer() {
                 className={image === avatarSrc ? style.selected : ''}
               />
             ))}
+              <button className={style.right} onClick={scrollRight}>{'>'}</button>
+              <button className={style.left} onClick={scrollLeft}>{'<'}</button>
           </div>
-          <button className={style.right} onClick={scrollRight}>{'>'}</button>
-          <button className={style.left} onClick={scrollLeft}>{'<'}</button>
+        
           <div className={style.buttons}>
             <button onClick={() => nav(-1)}>back</button>
             <button onClick={handleUpdateUser}>send</button>

@@ -14,7 +14,7 @@ const rooms = {};
 
 function getCurrentBackgroundImage() {
     const currentHour = new Date().getHours();
-    if (currentHour == 0) { currentHour = 24; }
+    if (currentHour == 0) { return './24.png'; }
     return `./${currentHour}.png`; // +1 כי התמונות ממוספרות מ-1 עד 24
 }
 

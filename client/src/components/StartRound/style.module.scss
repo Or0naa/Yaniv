@@ -4,6 +4,10 @@
 display: none;
 }
 
+.button{
+    @extend .bigButtom;
+}
+
 .startRound{
     width: 100vw;
     height: 100vh;

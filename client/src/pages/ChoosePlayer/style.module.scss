@@ -2,9 +2,32 @@
 
 .container {
     @extend .center;
+    padding: 2em;
     gap: 2em;
-    width: 100%;
     position: relative;
+    text-shadow: 1px 1px 3px var(--light-sand-color);
+
+    .images {
+        @extend .center;
+        position: relative;
+        margin-top: 40px;
+
+        .right {
+            position: absolute;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .left {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+    }
+
 
     .right,
     .left {
@@ -14,30 +37,36 @@
         border: none;
         cursor: pointer;
         z-index: 1;
+
     }
 
-    .right {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
 
-    .left {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
+}
+
+.header{
+    @extend .center;
+}
+
+.name {
+    background-color: #fff;
+    @extend .frame;
+    width: 60%;
+    // max-width: 150px;
+    padding: 10px;
+
+    &>input {
+        font-size: 25px;
+      width: 90%;
     }
 }
 
 .avatars {
     @extend .center;
     flex-direction: row;
-    width: 80%;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    padding-left: 45%;
+    margin-bottom: 2em;
+
 
     &>img {
         width: 5em;
@@ -62,22 +91,26 @@
     @extend .center;
     flex-direction: row;
     gap: 2rem;
+
     &>button {
         @extend .bigButtom;
 
     }
 }
 
+
 @media only screen and (max-width: 350px) {
     .avatars {
         width: 200px;
         padding-left: 100px;
+
         &>img {
-            height: 70px;
-            width: 70px;
+            height: 50px;
+            width: 50px;
             aspect-ratio: 1/1;
+
             &.selected {
-                height: 90px;
+                height: 70px;
             }
         }
     }

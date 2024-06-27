@@ -1,25 +1,17 @@
 @import '../../index.scss';
 
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 5rem;
-}
-
-
-
-.myCards {
   @extend .center;
-  flex-direction: row;
-  gap: 1em;
-  // background-color: #ffffff6f;
+  gap: 3em;
+  position: relative;
+  padding: 1rem;
 }
 
 .gameTable {
   @extend .center;
   flex-direction: row;
-
-  gap: 20%;
+  margin-bottom: 2rem;
+  gap: 5em;
 }
 
 .deck {
@@ -43,7 +35,6 @@
 
 .userCard {
   transition: margin-bottom 0.3s ease;
-  cursor: pointer;
 }
 
 .lastCard {
@@ -58,18 +49,141 @@
   opacity: 0;
 }
 
-.player2 {
-  position: relative;
+.player2, .player3, .player4 {
+  position: absolute;
   width: max-content;
+  transition: all 0.3s ease;
 }
 
+.isMe{
+  transform: rotate(5.25deg);
+  box-shadow: 2px 2px 10px #000000;
+
+}
+
+.player2 {
+  top: 12%;
+  left: 1%;
+  transform: rotate(352.25deg);
+}
+
+.player3 {
+  top: 2%;
+  right: 20%;
+  transform: rotate(355deg);
+}
+
+.player4 {
+  bottom: 40%;
+  left: 1%;
+  transform: rotate(354deg);
+  z-index: 0;
+}
+
+
+.move, .help {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  @extend .bigButtom;
+@extend .frame;
+
+}
+
+.move {
+width: fit-content;
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+.help{
+position: absolute;
+  left: 0.5rem;
+}
+
+.user{
+display: flex;
+background-color: aliceblue;
+flex-wrap: wrap;
+float: right;
+}
+
+.myCards {
+  @extend .center;
+  flex-direction: row;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+
+.detailes{
+@extend .center;
+max-width: 200px;
+width: fit-content;
+@extend .onlyText;
+background-color: #0000004c;
+border-radius: 10px;
+padding: 10px
+}
+
+.importentButtons{
+  @extend .center;
+  flex-direction: row;
+  width: 100%;
+  gap: 1em;
+  justify-content: flex-end;
+
+}
 .opponentCard {
   position: absolute;
 }
 
-@media screen and (max-width: 400px) {
+.yanivDisabled, .yaniv{
+position: absolute;
+}
+
+@media screen and (max-width: 580px) {
   .deck {
     width: 50px;
     height: 75px;
+  }
+
+  .importentButtons{
+    gap: 0.1em;
+    font-size: 12px;
+  }
+  .myCards {
+    gap: 10px;
+  }
+
+  .detailes{
+    max-width: 120px;
+  }
+  .gameTable {
+    gap: 1em;
+  }
+
+  .player2 {
+    top: 110%;
+    left: 35%;
+
+    transform: rotate(0deg);
+  }
+  
+  .player3 {
+    top: 95%;
+    right: 40%;
+    transform: rotate(345deg);
+  }
+  
+  .player4 {
+    bottom: 10%;
+    left: 10%;
+    transform: rotate(12deg);
   }
 }

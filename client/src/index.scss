@@ -88,14 +88,22 @@ body {
   background-color: var(--light-sand-color);
   position: relative;
   cursor: pointer;
+  font-size: 5rem;
 }
 
-@media screen and (max-width: 400px) {
+.frame {
+  border: outset;
+  border: 5px #000 solid;
+  border-radius: 10px;
+  box-shadow: -10px 5px 0 0 #000;
+}
+
+@media screen and (max-width: 580px) {
 .card{
   width: 3rem;
   min-width: 50px;
   height: 5rem;
   border-radius: 10px;
-
+font-size: 3rem;
 }  
 }
