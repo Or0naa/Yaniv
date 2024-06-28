@@ -1,17 +1,34 @@
 @import '../../index.scss';
-
 .container {
   @extend .center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
   gap: 3em;
-  position: relative;
   padding: 1rem;
 }
 
-.gameTable {
+.top {
+  width: 100vw;
+  @extend .center;
+  justify-content: space-between;
+  flex-shrink: 0; /* מונע מהטופ להצטמצם */
+}
+
+.middle {
+  width: 100vw;
   @extend .center;
   flex-direction: row;
-  margin-bottom: 2rem;
   gap: 5em;
+  position: relative;
+  flex-grow: 1; /* מאפשר ל-middle לגדול ולמלא את החלל */
+}
+
+.bottom {
+  width: 100vw;
+  @extend .center;
+  flex-shrink: 0; /* מונע מה-bottom להצטמצם */
 }
 
 .deck {
@@ -50,9 +67,9 @@
 }
 
 .player2, .player3, .player4 {
-  position: absolute;
-  width: max-content;
-  transition: all 0.3s ease;
+  // position: absolute;
+  // width: max-content;
+  // transition: all 0.3s ease;
 }
 
 .isMe{
@@ -62,22 +79,21 @@
 }
 
 .player2 {
-  top: 12%;
-  left: 1%;
-  transform: rotate(352.25deg);
+  // top: 12%;
+  // left: 1%;
+  transform: rotate(4.25deg);
 }
 
 .player3 {
-  top: 2%;
-  right: 20%;
-  transform: rotate(355deg);
+  // top: 2%;
+  // right: 20%;
+  transform: rotate(355.78deg);
 }
 
 .player4 {
-  bottom: 40%;
-  left: 1%;
+  // bottom: 40%;
+  // left: 1%;
   transform: rotate(354deg);
-  z-index: 0;
 }
 
 
@@ -168,22 +184,5 @@ position: absolute;
     gap: 1em;
   }
 
-  .player2 {
-    top: 110%;
-    left: 35%;
 
-    transform: rotate(0deg);
-  }
-  
-  .player3 {
-    top: 95%;
-    right: 40%;
-    transform: rotate(345deg);
-  }
-  
-  .player4 {
-    bottom: 10%;
-    left: 10%;
-    transform: rotate(12deg);
-  }
 }

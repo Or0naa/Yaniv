@@ -8,14 +8,18 @@ display: none;
     @extend .bigButtom;
 }
 
-.startRound{
+.startRound {
     width: 100vw;
     height: 100vh;
-    position: relative;
+    position: fixed; /* שינוי ל-fixed */
+    top: 0; /* קביעה של מיקום העליון */
+    left: 0; /* קביעה של מיקום השמאלי */
     @extend .center;
     background-color: #02020233;
     backdrop-filter: blur(10px);
+    z-index: 1000;
 }
+
 
 .cards{
     @extend .center;

@@ -185,11 +185,27 @@ export default function Board() {
   };
   return (
     <div className={style.container}>
-      <div>
-        <div onClick={handleStart}><StartRound start={game.startGame} /></div>
-        <button className={style.help} onClick={handlePopup}>help</button>
+      <button className={style.help} onClick={handlePopup}>help</button>
+      <div onClick={handleStart}><StartRound start={game.startGame} /></div>
+      <div className={style.top}>
+        {otherPlayers && otherPlayers.map((player, index) => (
+          <div key={player.id} className={style[`player${index + 2}`]}>
+            {player.userCards && player.userCards.length > 0 ? (
+              player.userCards.slice(0, 5).map((card, cardIndex) => (
+                <div key={cardIndex}
+                  style={{ left: `${cardIndex * 10}px` }}
+                  className={style.opponentCard}>
+                  <PlayerCard image={player.image} name={player.name} score={player.score} />
+                </div>
+              ))
+            ) : (
+              <div>{`ל${player.name} לא נשארו קלפים`}</div>
+            )}
+          </div>
+        ))}
       </div>
-      <div className={style.gameTable}>
+
+      <div className={style.middle}>
         <div className={style.deck}>
           {game.deck.map((card, index) => (
             <div
@@ -222,23 +238,25 @@ export default function Board() {
             ))}
           </div>
         </div>
+
       </div>
-      <div onClick={handleYaniv} className={isYaniv && isMyTurn ? style.yaniv : style.yanivDisabled}>
+      <div className={style.bottom}>
+        <div onClick={handleYaniv} className={isYaniv && isMyTurn ? style.yaniv : style.yanivDisabled}>
           <Yaniv click={isYaniv && isMyTurn && !takeCard} />
         </div>
-      <div className={style.importentButtons}>
-      <button className={style.move} onClick={handlePlaceCards} disabled={!isMyTurn || takeCard}>Make Move</button>
+        <div className={style.importentButtons}>
+          <button className={style.move} onClick={handlePlaceCards} disabled={!isMyTurn || takeCard}>Make Move</button>
 
-        <div className={style.detailes}>
-          
-          <div>Total points right now: {currentPoint}</div>
-          <div>on selected cards: {chosenCards.reduce((acc, card) => acc + card.value, 0)}</div>
+          <div className={style.detailes}>
+
+            <div>Total points right now: {currentPoint}</div>
+            <div>on selected cards: {chosenCards.reduce((acc, card) => acc + card.value, 0)}</div>
+          </div>
+
+          <div className={style.isMe}>
+            <PlayerCard image={isMe.image} name={isMe.name} score={isMe.score} />
+          </div>
         </div>
-    
-        <div className={style.isMe}>
-          <PlayerCard image={isMe.image} name={isMe.name} score={isMe.score} />
-        </div>
-      </div>
         <div className={style.myCards}>
           {myCards.map((card, index) => (
             <div
@@ -252,23 +270,6 @@ export default function Board() {
             </div>
           ))}
         </div>
-    
-      <div>
-        {otherPlayers && otherPlayers.map((player, index) => (
-          <div key={player.id} className={style[`player${index + 2}`]}>
-            {player.userCards && player.userCards.length > 0 ? (
-              player.userCards.slice(0, 5).map((card, cardIndex) => (
-                <div key={cardIndex}
-                  style={{ left: `${cardIndex * 10}px` }}
-                  className={style.opponentCard}>
-                  <PlayerCard image={player.image} name={player.name} score={player.score} />
-                </div>
-              ))
-            ) : (
-              <div>{`ל${player.name} לא נשארו קלפים`}</div>
-            )}
-          </div>
-        ))}
       </div>
     </div>
   );

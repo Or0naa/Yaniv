@@ -5,7 +5,7 @@ import { WhatsappIcon, WhatsappShareButton, EmailIcon, EmailShareButton } from '
 import ChoosePlayer from '../ChoosePlayer'
 export default function Waiting() {
   const game = useGameStore(state => state.game);
-  const shareText = `Join my game with the code: ${game.roomId}`;
+  const shareText = `Join my game with the code: ${game.roomId} in https://yaniv-or0naas-projects.vercel.app`;
 
   console.log("id: ", game.roomId)
 
@@ -16,7 +16,7 @@ export default function Waiting() {
          </div>
       <div className={style.share}>Share:
       <WhatsappShareButton
-        url={window.location.href} //change to website
+        // url={window.location.href} //change to website
         title={shareText}
         separator=":: "
         className={style.shareButton}
