@@ -1,7 +1,10 @@
 @font-face {
-    font-family: 'noot';
+    font-family: 'Noot';
     src: local('Noot'),
-        url('./Noot.otf') format('truetype');
+         url('./Noot.otf') format('opentype'),
+         url('./Noot.woff2') format('woff2'),
+         url('./Noot.woff') format('woff'),
+         url('./Noot.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
