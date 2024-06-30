@@ -2,9 +2,13 @@
     font-family: 'Noot';
     src: local('Noot'),
          url('./Noot.otf') format('opentype'),
+         url('noot-aj.eot?#iefix') format('embedded-opentype'),
          url('./Noot.woff2') format('woff2'),
          url('./Noot.woff') format('woff'),
-         url('./Noot.ttf') format('truetype');
+         url('./Noot.ttf') format('truetype'),
+         url('noot-aj.woff') format('woff'),
+         url('noot-aj.ttf') format('truetype'),
+         url('noot-aj.svg#nootregular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
