@@ -45,6 +45,7 @@ io.on('connection', (socket) => {
         };
         rooms[newRoomId] = newRoom;
         socket.join(newRoomId);
+        console.log("players in new room: ", rooms[newRoomId].players);
         socket.emit('roomCreated', newRoomId, newRoom.players);
         socket.emit('userId', socket.id);
     });
@@ -59,6 +60,7 @@ io.on('connection', (socket) => {
             };
             room.players.push(newPlayer); // Push the new player into the players array
             socket.join(roomId);
+            console.log("players join in room: ", rooms[roomId].players);
             io.to(roomId).emit('game:join-success', room);
         } else {
             socket.emit('roomFull');
@@ -71,16 +73,17 @@ io.on('connection', (socket) => {
         if (room) {
             room.game = game;
             room.players = game.players; // עדכון רשימת השחקנים בחדר
+            console.log("players update in room: ", rooms[roomId].players);
             io.to(roomId).emit('updateBoard', game);
         }
     });
-    socket.on('updatePlayerList', (roomId, playerList) => {
-        const room = rooms[roomId];
-        if (room) {
-            room.players = playerList; // עדכון רשימת השחקנים בחדר
-            io.to(roomId).emit('updatePlayerList', playerList);
-        }
-    });
+    // socket.on('updatePlayerList', (roomId, playerList) => {
+    //     const room = rooms[roomId];
+    //     if (room) {
+    //         room.players = playerList; // עדכון רשימת השחקנים בחדר
+    //         io.to(roomId).emit('updatePlayerList', playerList);
+    //     }
+    // });
 
 
     socket.on('disconnect', () => {

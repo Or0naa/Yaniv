@@ -1,0 +1,117 @@
+@import '../../index.scss';
+
+.openPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    cursor: pointer;
+}
+
+.logo{
+    position: fixed;
+    z-index: 99999;
+}
+
+.deck {
+    @extend .center;
+    flex-direction: row;
+    gap: 13rem;
+    filter: blur(2px);
+}
+
+.deckCard {
+    position: absolute;
+}
+.deckCard:nth-child(1){
+    transform: rotate(-7deg) translateX(-5px);
+}.deckCard:nth-child(2){
+    transform: rotate(7deg) translateX(5px);
+}.deckCard:nth-child(3){
+    transform: rotate(-3deg) translateX(3px);
+}.deckCard:nth-child(4){
+    transform: rotate(-4deg) translateX(0px);
+}.deckCard:nth-child(5){
+    transform: rotate(2deg) translateX(-5px);
+}.deckCard:nth-child(6){
+    transform: rotate(2deg) translateX(-8px);
+}.deckCard:nth-child(7){
+    transform: rotate(5deg) translateX(5px);
+}.deckCard:nth-child(8){
+    transform: rotate(-5deg) translateX(-7px);
+}
+
+.cardFan {
+    position: absolute;
+    bottom: 20%;
+    display: flex;
+    justify-content: center;
+    transform: rotate(2deg);
+    filter: blur(2px);
+
+}
+
+.cardFan .card {
+    position: absolute;
+    transform-origin: bottom center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.cardFan .card:nth-child(1) {
+    transform: rotate(-20deg) translateX(-50px);
+}
+
+.cardFan .card:nth-child(2) {
+    transform: rotate(-10deg) translateX(-25px);
+}
+
+.cardFan .card:nth-child(3) {
+    transform: rotate(0deg);
+}
+
+.cardFan .card:nth-child(4) {
+    transform: rotate(10deg) translateX(25px);
+}
+
+.cardFan .card:nth-child(5) {
+    transform: rotate(20deg) translateX(50px);
+}
+
+
+.opponentFan {
+    @extend .cardFan;
+    filter: blur(2px);
+    bottom: 80%;
+    right: 20%;
+    transform: rotate(360deg);
+}
+
+.opponentFan .card {
+    position: absolute;
+    transform-origin: bottom center;
+    transition: transform 0.2s ease-in-out;
+    background-color: aqua;
+    height: 50px;
+}
+
+.opponentFan .card:nth-child(1) {
+    transform: rotate(-20deg) translateX(-50px);
+}
+
+.opponentFan .card:nth-child(2) {
+    transform: rotate(-10deg) translateX(-25px);
+}
+
+.opponentFan .card:nth-child(3) {
+    transform: rotate(0deg);
+}
+
+.opponentFan .card:nth-child(4) {
+    transform: rotate(10deg) translateX(25px);
+}
+
+.opponentFan .card:nth-child(5) {
+    transform: rotate(20deg) translateX(50px);
+}

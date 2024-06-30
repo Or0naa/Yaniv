@@ -36,7 +36,7 @@ export const useGameStore = create((set, get) => ({
         type: "friend",
     },
     setGame: (game) => set({ game }),
-    createGame: () => {
+    createGame: (numPlayers) => {
         const game = get().game;
         const setGame = get().setGame;
         const user = useUserStore.getState().user;
@@ -53,6 +53,7 @@ export const useGameStore = create((set, get) => ({
         let newGame = {
             deck: newCards,
             players: players,
+            numPlayers: numPlayers,
             openCards: [],
             startGame: false,
             type: "friend",
@@ -97,7 +98,7 @@ export const useGameStore = create((set, get) => ({
         });
 
         socket.on('roomFull', () => {
-            console.log('');
+           return("")
         });
     },
 

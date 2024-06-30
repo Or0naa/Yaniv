@@ -25,15 +25,21 @@ export default function Board() {
   const [isMe, setIsMe] = useState({})
 
   useEffect(() => {
-    const updatePlayer = game.players.find(p => p.id === user.id)
+    if (game.numPlayers > 1) {
+      console.log(game.players)
+      const updatePlayer = game.players.find(p => p.id === user.id)
 
-    const calculationPoint = updatePlayer.userCards.reduce((acc, card) => acc + card.value, 0);
-    setCurrentPoint(calculationPoint);
-    setIsYaniv(calculationPoint <= 7);
-    setOtherPlayers(game.players.filter(p => p.id !== updatePlayer.id));
-    setMyCards(updatePlayer.userCards);
-    setIsMe(updatePlayer)
-
+      const calculationPoint = updatePlayer.userCards.reduce((acc, card) => acc + card.value, 0);
+      setCurrentPoint(calculationPoint);
+      setIsYaniv(calculationPoint <= 7);
+      setOtherPlayers(game.players.filter(p => p.id !== updatePlayer.id));
+      setMyCards(updatePlayer.userCards);
+      setIsMe(updatePlayer)
+    }
+    else {
+      setMyCards(game.players[0].userCards);
+      setIsMe(game.players[0])
+    }
   }, [user, game]);
 
 
@@ -167,7 +173,9 @@ export default function Board() {
   const handleQuickPlay = (card) => {
     console.log("handleQuickPlay", card);
     console.log({ quickPlayCard })
-    if (card.number !== quickPlayCard || game.currentPlayer === game.players.findIndex(p => p.id === isMe.id) + 1) {
+    const rightAfterMe = (game.currentPlayer + 1) % game.players.length;
+
+    if (card.number !== quickPlayCard || rightAfterMe !== game.players.findIndex(p => p.id === isMe.id)) {
       return;
     }
 
@@ -186,6 +194,9 @@ export default function Board() {
   return (
     <div className={style.container}>
       <button className={style.help} onClick={handlePopup}>help</button>
+      {takeCard &&
+        <div> Please Take a Card
+        </div>}
       <div onClick={handleStart}><StartRound start={game.startGame} /></div>
       <div className={style.top}>
         {otherPlayers && otherPlayers.map((player, index) => (
@@ -206,6 +217,7 @@ export default function Board() {
       </div>
 
       <div className={style.middle}>
+
         <div className={style.deck}>
           {game.deck.map((card, index) => (
             <div
@@ -219,6 +231,7 @@ export default function Board() {
         </div>
 
         <div className={style.deck}>
+
           {game.openCards.map((card, index) => (
             <div
               key={index}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from '../../components/Logo'
 import style from './style.module.scss'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +8,7 @@ export default function Welcome() {
     const nav = useNavigate()
 
     const openPopup = usePopupStore(state => state.openPopup)
-    const createGame = useGameStore(state => state.createGame)
+    const game = useGameStore(state => state.game)
     const user = useUserStore(state => state.user)
     const joinGame = useGameStore(state => state.joinGame)
     const [code, setCode] = useState('')
@@ -39,16 +39,17 @@ export default function Welcome() {
     }
 
     const handleCreateGame = () => {
-        createGame()
         nav('/create')
     }
 
     const handleJoin = () => {
         joinGame(code, user)
-        nav('/choose')
+        nav('/waiting')
     }
 
-    
+
+
+
     return (
         <div className={style.welcome}>
             <div className={style.Logo}>
@@ -56,7 +57,7 @@ export default function Welcome() {
             </div>
             <form onSubmit={handleJoin}>
                 <div className={style.input}>
-                <input
+                    <input
                         type="text"
                         placeholder="Enter Your Code"
                         onChange={(e) => setCode(e.target.value)}

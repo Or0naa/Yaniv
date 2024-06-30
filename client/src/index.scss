@@ -40,6 +40,13 @@ body {
   padding: 0;
 }
 
+.settings{
+  background-color: inherit;
+  position: fixed;
+  border: none;
+  filter: drop-shadow( 2px 2px 2px var(--light-blue-color));
+}
+
 .center {
   display: flex;
   flex-direction: column;
@@ -78,9 +85,8 @@ body {
 }
 
 .card {
-  width: 6rem;
-  min-width: 90px;
-  height: 10rem;
+  width: 5rem;
+  height: 8rem;
   border-radius: 20px;
   border: 2px solid #b1b1b1;
   box-shadow: 2px 2px 10px #000;
@@ -88,7 +94,7 @@ body {
   background-color: var(--light-sand-color);
   position: relative;
   cursor: pointer;
-  font-size: 5rem;
+  font-size: 4rem;
 }
 
 .frame {

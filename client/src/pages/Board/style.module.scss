@@ -11,8 +11,8 @@
 
 .top {
   width: 100vw;
-  @extend .center;
-  justify-content: space-between;
+  display: flex;
+  justify-content: center; /* מרכז את הפריטים במקרה של פריט אחד */
   flex-shrink: 0; /* מונע מהטופ להצטמצם */
 }
 
@@ -33,13 +33,12 @@
 
 .deck {
   position: relative;
-  width: 100px; // Adjust the width as needed
-  height: 150px; // Adjust the height as needed
+  width: 5rem; // Adjust the width as needed
+  height: 8rem; // Adjust the height as needed
 }
 
 .openCards {
   position: relative;
-  font-size: 50px;
 }
 
 .card {
@@ -67,9 +66,8 @@
 }
 
 .player2, .player3, .player4 {
-  // position: absolute;
-  // width: max-content;
-  // transition: all 0.3s ease;
+max-width: 33%;
+margin-left: auto;
 }
 
 .isMe{
