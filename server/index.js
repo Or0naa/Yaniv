@@ -4,6 +4,8 @@ const { createServer } = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const schedule = require('node-schedule');
+const moment = require('moment-timezone');
+
 
 app.use(cors());
 
@@ -13,7 +15,7 @@ const io = new Server(server, { cors: { origin: '*', methods: '*' } });
 const rooms = {};
 
 function getCurrentBackgroundImage() {
-    const currentHour = new Date().getHours();
+    const currentHour = moment().tz('Asia/Jerusalem').hour();
     if (currentHour == 0) { return './24.png'; }
     return `./${currentHour}.png`; // +1 כי התמונות ממוספרות מ-1 עד 24
 }
@@ -46,7 +48,7 @@ io.on('connection', (socket) => {
         socket.emit('roomCreated', newRoomId, newRoom.players);
         socket.emit('userId', socket.id);
     });
-    
+
 
     socket.on('game:join-room', (roomId, userData) => {
         const room = rooms[roomId];
@@ -65,7 +67,7 @@ io.on('connection', (socket) => {
 
     socket.on('move', (roomId, game) => {
         const room = rooms[roomId];
-        console.log({room})
+        console.log({ room })
         if (room) {
             room.game = game;
             room.players = game.players; // עדכון רשימת השחקנים בחדר
@@ -79,10 +81,10 @@ io.on('connection', (socket) => {
             io.to(roomId).emit('updatePlayerList', playerList);
         }
     });
-    
+
 
     socket.on('disconnect', () => {
-    console.log("player disconnect")
+        console.log("player disconnect")
     });
 });
 
