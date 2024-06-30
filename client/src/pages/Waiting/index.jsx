@@ -9,7 +9,7 @@ export default function Waiting() {
   const createGame = useGameStore(state => state.createGame)
 
 
-  const shareText = `Join my game with the code: ${game.roomId} in https://yaniv-or0naas-projects.vercel.app`;
+  const shareText = `Join my game with the code: ${game.roomId}`;
   const nav = useNavigate()
   // console.log("id: ", game.roomId)
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function Waiting() {
       </div>
       <div className={style.share}>Share:
         <WhatsappShareButton
-          // url={window.location.href} //change to website
+          url={"https://yaniv-or0naas-projects.vercel.app"} //change to website
           title={shareText}
           separator=":: "
           className={style.shareButton}
@@ -38,7 +38,7 @@ export default function Waiting() {
           <WhatsappIcon size={32} round />
         </WhatsappShareButton>
         <a
-          href={`sms:?&body=${encodeURIComponent(shareText)}`}
+          href={`sms:?&body=${encodeURIComponent(shareText)} in https://yaniv-or0naas-projects.vercel.app`}
           className={style.shareButton}
         >
           <img src="./sms.png" alt="SMS" style={{ width: 32, height: 32 }} />
