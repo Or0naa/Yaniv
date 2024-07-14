@@ -1,10 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Gluten:wght@700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
 
-html,
-body {
-  height: 100%;
-
-}
 
 :root {
   --blue-color: #0583F2;
@@ -24,10 +20,15 @@ body {
 
 * {
   font-family: "Gluten", sans-serif;
+  /* font-family: "Fredoka", system-ui ,sans-serif; */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+// html[lang="heM"] *,
+// html[lang="heW"] * {  font-family: "Fredoka", system-ui ,sans-serif;
+// }
 
 
 .App {

@@ -1,12 +1,9 @@
 @import '../../index.scss';
 
 
-.card {
+.cardGame {
 
     @extend .card;
-
-
-
     .up {
         width: 20%;
         max-height: 20%;
@@ -63,8 +60,9 @@
     opacity: 1;
 }
 
-@media screen and (max-width: 580) {
-
-
-
+.deckCard{
+    @extend .cardGame;
+    width: 5rem;
+    height: 8rem;
 }
+

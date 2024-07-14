@@ -39,6 +39,7 @@
 
 .openCards {
   position: relative;
+  
 }
 
 .card {
@@ -163,8 +164,8 @@ position: absolute;
 
 @media screen and (max-width: 580px) {
   .deck {
-    width: 50px;
-    height: 75px;
+    width: 5rem;
+    height: 8rem;
   }
 
   .importentButtons{

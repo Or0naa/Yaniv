@@ -1,6 +1,6 @@
-import { socket } from './socket';
+import { socket } from './helpers/socket.js';
 import { create } from 'zustand';
-import { cards } from './cards.js';
+import { cards } from './helpers/cards.js';
 
 export const usePopupStore = create((set) => ({
     isOpen: false,
@@ -8,6 +8,13 @@ export const usePopupStore = create((set) => ({
     openPopup: (content) => set({ isOpen: true, content }),
     closePopup: () => set({ isOpen: false, content: null }),
 }))
+
+export const useLanguageStore = create((set) => ({
+    language: 'en', // 'heM' for Hebrew(man), 'heW' for Hebrew(woman) , 'en' for English
+    toggleLanguage: (lan) => set({ language: lan }),
+
+
+  }));
 
 export const useUserStore = create((set, get) => ({
     user: {
@@ -36,7 +43,7 @@ export const useGameStore = create((set, get) => ({
         type: "friend",
     },
     setGame: (game) => set({ game }),
-    createGame: (numPlayers) => {
+    createGame: (numPlayers, yanivLine) => {
         const game = get().game;
         const setGame = get().setGame;
         const user = useUserStore.getState().user;
@@ -59,6 +66,7 @@ export const useGameStore = create((set, get) => ({
             type: "friend",
             lastGame: null,
             winner: null,
+            yanivLine: yanivLine,
         };
 
         if (game.type === "computer") {
@@ -224,18 +232,29 @@ export const useGameStore = create((set, get) => ({
 }));
 
 const saruf = (cards) => {
-    const suits = ["♠", "♥", "♣", "♦"]
+    const suits = ["♠", "♥", "♣", "♦"];
     for (let suit of suits) {
         let numbers = cards.filter(card => card.suit === suit)
             .map(card => card.number)
-            .sort((a, b) => a - b)
-        for (let i; i < numbers.length - 2; i++)
+            .sort((a, b) => a - b);
+        
+        // בדיקה לשלושה קלפים עוקבים
+        for (let i = 0; i < numbers.length - 2; i++) {
             if (numbers[i + 1] === numbers[i] + 1 && numbers[i + 2] === numbers[i] + 2) {
                 return true;
-            } else if (numbers[i + 1] === numbers[i] && numbers[i + 2] === numbers[i]) {
-                return true;
             }
+        }
     }
+
+    // בדיקה לשלושה קלפים עם אותו מספר
+    const numberCounts = {};
+    for (let card of cards) {
+        numberCounts[card.number] = (numberCounts[card.number] || 0) + 1;
+        if (numberCounts[card.number] === 3) {
+            return true;
+        }
+    }
+
     return false;
 }
 

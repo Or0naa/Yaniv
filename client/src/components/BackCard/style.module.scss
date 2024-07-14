@@ -1,6 +1,6 @@
 @import '../../index.scss';
 
-.card{
+.cardGame{
     @extend .card;
     box-shadow: 0 0 0 #000;
 
@@ -11,4 +11,10 @@
         object-fit: cover;
         border-radius: 10%;
     }
+}
+
+.deckCard{
+    @extend .cardGame;
+    width: 5rem;
+    height: 8rem;
 }

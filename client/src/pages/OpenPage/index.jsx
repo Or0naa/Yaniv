@@ -7,6 +7,9 @@ import BackCard from '../../components/BackCard';
 
 export default function OpenPage() {
     const nav = useNavigate();
+    const randomCard = ()=>{
+        return Math.floor(Math.random() * 13) + 1;
+    }
 
     return (
         <div className={style.openPage} onClick={() => nav('/welcome')}>
@@ -18,15 +21,15 @@ export default function OpenPage() {
                     <CardView value={'Joker'} suit={'Joker'} />
                 </div>
                 <div className={style.card}>
-                    <CardView value={'1'} suit={''} />
+                    <CardView value={randomCard()} suit={''} />
                 </div>
                 <div className={style.card}>
-                    <CardView className={style.card} value={'11'} suit={'♦'} />
+                    <CardView value={randomCard()} suit={'♦'} />
                 </div>
                 <div className={style.card}>
-                    <CardView value={'12'} suit={'♥'} />
+                    <CardView value={randomCard()} suit={'♥'} />
                 </div> <div className={style.card}>
-                    <CardView value={'13'} suit={'♣'} />
+                    <CardView value={randomCard()} suit={'♣'} />
                 </div>
             </div>
 
@@ -52,42 +55,42 @@ export default function OpenPage() {
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 1, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'5'} suit={'♦'} />
+                            value={randomCard()} suit={'♦'} />
                     </div>
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 2, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'1'} suit={'♣'} />
+                            value={randomCard()} suit={'♣'} />
                     </div>
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 3, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'9'} suit={'♦'} />
+                            value={randomCard()} suit={'♦'} />
                     </div>
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 4, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'10'} suit={'♦'} />
+                            value={randomCard()} suit={'♦'} />
                     </div>
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 5, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'3'} suit={'♥'} />
+                            value={randomCard()} suit={'♥'} />
                     </div>
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 6, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'11'} suit={'♦'} />
+                            value={randomCard()} suit={'♦'} />
                     </div>
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 7, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'8'} suit={'♥'} />
+                            value={randomCard()} suit={'♥'} />
                     </div>
                     <div className={style.deckCard}>
                         <CardView
                             style={{ zIndex: 8, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}
-                            value={'8'} suit={'♣'} />
+                            value={randomCard()} suit={'♣'} />
                     </div>
                 </div>
             </div>

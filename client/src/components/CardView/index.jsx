@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import style from './style.module.scss';
 
 
-export default function CardView({ value, suit }) {
+export default function CardView({ value, suit, deck=false }) {
 
 
     const [imgSuit, setImgSuit] = useState('')
@@ -16,7 +16,7 @@ export default function CardView({ value, suit }) {
 
     if (suit === "Joker") {
         return (
-            <div className={style.card}>
+            <div className={deck? style.deckCard : style.cardGame}>
                 <img className={style.up} src='./joker.png' alt='joker' />
                 <img className={style.big} src='./joker.png' alt='joker' />
                 <div className={style.points}>{points}</div>
@@ -25,7 +25,7 @@ export default function CardView({ value, suit }) {
     }
     if (value > 10) {
         return (
-            <div className={style.card}>
+            <div className={deck? style.deckCard : style.cardGame}>
                 <img className={style.imgUp} src={imgSuit} alt={imgSuit} />
                 <img className={style.imgDown} src={imgSuit} alt={imgSuit} />
                 <img className={style.big} src={imgValue} alt={imgValue} />
@@ -34,7 +34,7 @@ export default function CardView({ value, suit }) {
         )
     }
     return (
-        <div className={style.card}>
+        <div className={deck? style.deckCard : style.cardGame}>
             <img className={style.imgUp} src={imgSuit} alt={imgSuit} />
             <img className={style.imgDown} src={imgSuit} alt={imgSuit} />
             <div className={style.value}>{imgValue}</div>

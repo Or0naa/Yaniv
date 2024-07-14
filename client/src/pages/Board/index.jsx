@@ -31,13 +31,15 @@ export default function Board() {
 
       const calculationPoint = updatePlayer.userCards.reduce((acc, card) => acc + card.value, 0);
       setCurrentPoint(calculationPoint);
-      setIsYaniv(calculationPoint <= 7);
+      setIsYaniv(calculationPoint <= game.yanivLine );
       setOtherPlayers(game.players.filter(p => p.id !== updatePlayer.id));
       setMyCards(updatePlayer.userCards);
       setIsMe(updatePlayer)
     }
     else {
       setMyCards(game.players[0].userCards);
+      setCurrentPoint(game.players[0].userCards.reduce((acc, card) => acc + card.value, 0));
+      setIsYaniv(game.players[0].userCards.reduce((acc, card) => acc + card.value, 0) <= game.yanivLine);
       setIsMe(game.players[0])
     }
   }, [user, game]);
@@ -82,12 +84,21 @@ export default function Board() {
       return [card];
     });
   };
+
   const handleYaniv = () => {
-    if (!isYaniv || game.currentPlayer !== game.players.findIndex(p => p.id === isMe.id)) {
+    console.log(isYaniv, game.yanivLine)
+    if (!isYaniv) {
       return;
     }
     declareYaniv(isMe.id);
   };
+  
+  // const handleYaniv = () => {
+  //   if (!isYaniv || game.currentPlayer !== game.players.findIndex(p => p.id === isMe.id)) {
+  //     return;
+  //   }
+  //   declareYaniv(isMe.id);
+  // };
   const handleStart = () => {
     startGame(game);
   };
@@ -153,6 +164,8 @@ export default function Board() {
     } else if (from === "openCards") {
       const updateOpenCards = gameToUpdate.openCards.filter(c => c !== card);
       gameToUpdate.openCards = updateOpenCards;
+      setQuickPlayCard(null);
+
     }
 
     const userToUpdate = { ...user };
@@ -225,7 +238,7 @@ export default function Board() {
               onClick={() => isMyTurn && takeCard && handleTakeCard(card, "deck")}
               className={style.card}
               style={{ zIndex: index, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}>
-              <BackCard />
+              <BackCard deck={true}  />
             </div>
           ))}
         </div>
@@ -238,7 +251,7 @@ export default function Board() {
               className={style.card}
               onClick={() => isMyTurn && !takeCard && handleChooseCard(card)}
               style={{ zIndex: index, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}>
-              <CardView value={card.number} suit={card.suit} />
+              <CardView value={card.number} suit={card.suit} deck={true} />
             </div>
           ))}
           <div className={takeCard ? style.lastCard : style.notYet}>
