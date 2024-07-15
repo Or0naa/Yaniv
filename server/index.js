@@ -35,33 +35,46 @@ io.on('connection', (socket) => {
     socket.on('game:create-room', (game, userData) => {
         const newRoomId = generateRoomNumber();
         const newRoom = {
-            game,
-            players: [
-                {
-                    id: socket.id,
-                    ...userData
-                }
-            ]
+            game: { ...game, roomId: newRoomId },
+            players: game.players
+        };
+        newRoom.players[0] = {
+            ...userData,
+            id: socket.id,
         };
         rooms[newRoomId] = newRoom;
         socket.join(newRoomId);
-        console.log("players in new room: ", rooms[newRoomId].players);
+        // console.log("players in new room: ", rooms[newRoomId].players);
         socket.emit('roomCreated', newRoomId, newRoom.players);
         socket.emit('userId', socket.id);
     });
 
 
     socket.on('game:join-room', (roomId, userData) => {
+
         const room = rooms[roomId];
-        if (room && room.players.length < 4) {
-            const newPlayer = {
-                ...userData,
-                id: socket.id
-            };
-            room.players.push(newPlayer); // Push the new player into the players array
-            socket.join(roomId);
-            console.log("players join in room: ", rooms[roomId].players);
-            io.to(roomId).emit('game:join-success', room);
+        if (room && room.players.length <= 4) {
+            console.log("players before: ", room.players);
+            const emptySlot = room.players.findIndex(player => !player.id);
+            if (emptySlot !== -1) {
+              room.players[emptySlot] = {
+                ...room.players[emptySlot],
+                name: userData.name,
+                image: userData.image,
+                id: socket.id,
+              };
+                socket.join(roomId);
+                // console.log("players join in room: ", rooms[roomId].players);
+                // io.to(roomId).emit('game:join-success', room);
+                console.log("players after: ", room.players);
+                socket.emit('userId', socket.id);
+
+                room.game.players = room.players;
+                io.to(roomId).emit('updateBoard', room.game);
+
+            } else {
+                socket.emit('roomFull');
+            }
         } else {
             socket.emit('roomFull');
         }
@@ -73,7 +86,7 @@ io.on('connection', (socket) => {
         if (room) {
             room.game = game;
             room.players = game.players; // עדכון רשימת השחקנים בחדר
-            console.log("players update in room: ", rooms[roomId].players);
+            // console.log("players update in room: ", rooms[roomId].players);
             io.to(roomId).emit('updateBoard', game);
         }
     });
@@ -87,7 +100,7 @@ io.on('connection', (socket) => {
 
 
     socket.on('disconnect', () => {
-        console.log("player disconnect")
+        // console.log("player disconnect")
     });
 });
 

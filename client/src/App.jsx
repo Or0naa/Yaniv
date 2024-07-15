@@ -7,13 +7,13 @@ import Waiting from './pages/Waiting';
 import Board from './pages/Board';
 import ChoosePlayer from './pages/ChoosePlayer';
 import { useGameStore, useUserStore } from './store';
-import Logo from './components/Logo';
 import OpenPage from './pages/OpenPage';
 import Create from './pages/Create';
 import Layout from './Layout';
+import Win from './pages/Win';
 
 const App = () => {
-  const [backgroundImage, setBackgroundImage] = useState('./14.png');
+  const [backgroundImage, setBackgroundImage] = useState('./wait.png');
 
   useEffect(() => {
     socket.on('backgroundUpdate', (newImageUrl) => {
@@ -35,7 +35,9 @@ const App = () => {
         { path: '/game', element: <Board /> },
         { path: '/create', element: <Create /> },
         { path: '/waiting', element: <Waiting /> },
-        { path: '/choose', element: <ChoosePlayer /> }]
+        { path: '/choose', element: <ChoosePlayer /> },
+        { path: '/win', element: <Win /> },
+    ]
     }
   ]);
 

@@ -13,15 +13,13 @@ export default function Waiting() {
   const nav = useNavigate()
   // console.log("id: ", game.roomId)
   useEffect(() => {
-    if (game.numPlayers && game.players.length == game.numPlayers) {
+    console.log("Current game state: ", game);
+    if (game.numPlayers &&
+      game.players.filter(player => player.id !== null).length === game.numPlayers) {
+      console.log("All players have joined. Navigating to game.");
       nav('/game')
     }
-    if  (game.numPlayers && game.players.length > game.numPlayers ) {
-      confirm("Error. Please enter new code.")
-      nav('/create')
-
-    }
-  }, [game]);
+  }, [game.players, game.numPlayers]);
 
   return (
     <div className={style.container}>

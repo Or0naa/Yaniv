@@ -20,17 +20,15 @@ export const useUserStore = create((set, get) => ({
     user: {
         name: "player",
         image: "./girl1.png",
+        id: null,
 
     },
     setUser: (user) => {
         set({ user });
-        // const game = useGameStore.getState().game;
-        // if (game.type === "friend" && game.roomId) {
-        //     socket.emit('updateUser', game.roomId, user);
-        // }
     },
     addId: () => {
         socket.on('userId', (data) => {
+            console.log("data from server: ", data);
             const user = get().user;
             const setUser = get().setUser;
             setUser({ ...user, id: data });
@@ -57,6 +55,22 @@ export const useGameStore = create((set, get) => ({
         players[0].userCards = userCards;
         players[0].score = 0
 
+        if (numPlayers > 1) {
+            for (let i = 1; i < numPlayers; i++) {
+                const { userCards, deck: updatedDeck } = dealCards(newCards);
+                newCards = updatedDeck;
+                players.push({
+                    name: "player" + i,
+                    image: "./boy1.png",
+                    userCards: userCards,
+                    score: 0,
+                    id: null
+                });
+            }
+        }
+
+        console.log("players before ", players);
+
         let newGame = {
             deck: newCards,
             players: players,
@@ -67,6 +81,7 @@ export const useGameStore = create((set, get) => ({
             lastGame: null,
             winner: null,
             yanivLine: yanivLine,
+            goToWinPage: false,
         };
 
         if (game.type === "computer") {
@@ -76,33 +91,22 @@ export const useGameStore = create((set, get) => ({
             socket.on('roomCreated', (roomId, players) => {
                 set({ game: { ...newGame, roomId: roomId, players: players } });
             });
+
+            console.log("players after ", players);
         }
     },
 
     joinGame: (roomId, user) => {
+        console.log("joinGame");
         const setGame = get().setGame;
         const setUser = useUserStore.getState().setUser;
-
+      
         socket.emit('game:join-room', roomId, user);
-
-        socket.off('game:join-success');
+      
         socket.on('game:join-success', (room) => {
-            let updatedGame = room.game;
-
-            let { userCards, deck: updatedDeck } = dealCards(updatedGame.deck);
-            updatedGame.deck = updatedDeck;
-            updatedGame.players = room.players.map(player => {
-                if (player.id === socket.id) {
-                    player.userCards = userCards;
-                    player.score = 0
-                }
-                return player;
-            });
-            updatedGame.roomId = roomId;
-
-            setUser({ ...user, userCards, id: socket.id });
-            socket.emit('move', roomId, updatedGame);
-
+          console.log("room: ", room);
+          setGame(room.game);
+          setUser({ ...user, id: socket.id });
         });
 
         socket.on('roomFull', () => {
@@ -111,6 +115,7 @@ export const useGameStore = create((set, get) => ({
     },
 
     startGame: (game) => {
+        console.log("startGame", game);
         const newDeck = game.deck
         let card = newDeck.shift()
         const turn = game.winner? game.currentPlayer: Math.floor(Math.random() * game.players.length);
@@ -119,6 +124,7 @@ export const useGameStore = create((set, get) => ({
             deck: newDeck,
             openCards: [card],
             startGame: true,
+            goToWinPage: false,
             currentPlayer: turn,
             lastCard: [card]
         }
@@ -131,11 +137,15 @@ export const useGameStore = create((set, get) => ({
 
     socketBoardUpdate: () => {
         socket.on('updateBoard', (data) => {
-            console.log("move, ", data)
-            const setGame = get().setGame
-            setGame(data)
+          console.log("move, ", data);
+          const setGame = get().setGame;
+        //   const currentUser = useUserStore.getState().user;
+        //   const updatedPlayers = data.players.map(player => 
+        //     player.id === currentUser.id ? { ...player, ...currentUser } : player
+        //   );
+          setGame({ ...data});
         });
-    },
+      },
     handlePlayersUpdate: (roomId, data) => {
         const game = get().game;
         const setGame = get().setGame;
@@ -205,12 +215,14 @@ export const useGameStore = create((set, get) => ({
             ...game,
             players: players,
             winner: winner,
+            goToWinPage: true,
             lastGame: currentGameState  // שמירת מצב המשחק הנוכחי
         }
         startNewRound(updatedGame);
 
     },
     startNewRound: (game) => {
+        console.log("startNewRound", game)
         const newGame = {...game};
         let newCards = [...cards];
         newGame.deck = newCards.sort(() => Math.random() - 0.5);

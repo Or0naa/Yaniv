@@ -1,4 +1,3 @@
-// Board.jsx
 import React, { useEffect, useState } from 'react';
 import style from './style.module.scss';
 import { useGameStore, usePopupStore, useUserStore } from '../../store';
@@ -7,6 +6,7 @@ import PlayerCard from '../../components/PlayerCard';
 import Yaniv from '../../components/Yaniv';
 import BackCard from '../../components/BackCard';
 import StartRound from '../../components/StartRound';
+import { useNavigate } from 'react-router-dom';
 
 export default function Board() {
   const game = useGameStore(state => state.game);
@@ -23,6 +23,7 @@ export default function Board() {
   const [otherPlayers, setOtherPlayers] = useState([]);
   const [takeCard, setTakeCard] = useState(false);
   const [isMe, setIsMe] = useState({})
+  const nav = useNavigate()
 
   useEffect(() => {
     if (game.numPlayers > 1) {
@@ -31,7 +32,7 @@ export default function Board() {
 
       const calculationPoint = updatePlayer.userCards.reduce((acc, card) => acc + card.value, 0);
       setCurrentPoint(calculationPoint);
-      setIsYaniv(calculationPoint <= game.yanivLine );
+      setIsYaniv(calculationPoint <= game.yanivLine);
       setOtherPlayers(game.players.filter(p => p.id !== updatePlayer.id));
       setMyCards(updatePlayer.userCards);
       setIsMe(updatePlayer)
@@ -92,7 +93,13 @@ export default function Board() {
     }
     declareYaniv(isMe.id);
   };
-  
+
+  useEffect(() => {
+    if (game.goToWinPage) {
+      nav('/win')
+    }
+  }, [game.goToWinPage]);
+
   // const handleYaniv = () => {
   //   if (!isYaniv || game.currentPlayer !== game.players.findIndex(p => p.id === isMe.id)) {
   //     return;
@@ -215,18 +222,22 @@ export default function Board() {
         {otherPlayers && otherPlayers.map((player, index) => (
           <div key={player.id} className={style[`player${index + 2}`]}>
             {player.userCards && player.userCards.length > 0 ? (
-              player.userCards.slice(0, 5).map((card, cardIndex) => (
-                <div key={cardIndex}
-                  style={{ left: `${cardIndex * 10}px` }}
-                  className={style.opponentCard}>
-                  <PlayerCard image={player.image} name={player.name} score={player.score} />
-                </div>
-              ))
+              <>
+                {game.currentPlayer === index ? (
+                  <div className={style.turnMarker}>{`תור ${player.name}`}</div>
+                ) : null}
+                {player.userCards.slice(0, 5).map((card, cardIndex) => (
+                  <div key={cardIndex} style={{ left: `${cardIndex * 10}px` }} className={style.opponentCard}>
+                    <PlayerCard image={player.image} name={player.name} score={player.score} />
+                  </div>
+                ))}
+              </>
             ) : (
               <div>{`ל${player.name} לא נשארו קלפים`}</div>
             )}
           </div>
         ))}
+
       </div>
 
       <div className={style.middle}>
@@ -238,7 +249,7 @@ export default function Board() {
               onClick={() => isMyTurn && takeCard && handleTakeCard(card, "deck")}
               className={style.card}
               style={{ zIndex: index, transform: `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 10 - 5}deg)` }}>
-              <BackCard deck={true}  />
+              <BackCard deck={true} />
             </div>
           ))}
         </div>

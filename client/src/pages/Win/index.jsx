@@ -7,9 +7,16 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Win() {
     const game = useGameStore(state => state.game)
+    const setGame = useGameStore(state => state.setGame)
     const nav = useNavigate()
+
+    const handleBack = () => {
+        setGame({ ...game, goToWinPage: false })
+        nav('/game')
+    }
     return (
         <div onClick={()=>nav('/game')} className={style.win}>
+            <button onClick={handleBack}>back to game</button>
             {game.lastGame && game.winner && (
                 <div>
                     <div>{game.winner}Won the game</div>
