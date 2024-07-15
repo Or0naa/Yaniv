@@ -14,7 +14,7 @@ export default function OpenPage() {
     return (
         <div className={style.openPage} onClick={() => nav('/welcome')}>
             <div className={style.logo}>
-            <Logo />
+                <img src="./logo.png" alt="logo" />
 </div>
             <div className={style.cardFan}>
                 <div className={style.card}>

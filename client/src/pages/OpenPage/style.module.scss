@@ -11,8 +11,12 @@
 }
 
 .logo{
-    position: fixed;
+    // position: fixed;
     z-index: 99999;
+    width: 75%;
+    &>img{
+        width: 100%
+    }
 }
 
 .deck {
