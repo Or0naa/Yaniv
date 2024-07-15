@@ -28,9 +28,9 @@ export default function Waiting() {
       </div>
       <div className={style.share}>Share:
         <WhatsappShareButton
-          url={"https://yaniv-or0naas-projects.vercel.app"} //change to website
+          url={"https://yaniv-or0naas-projects.vercel.app"} 
           title={shareText}
-          separator=":: "
+          separator=": "
           className={style.shareButton}
         >
           <WhatsappIcon size={32} round />

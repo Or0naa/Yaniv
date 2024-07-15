@@ -290,7 +290,7 @@ export default function Board() {
             <div>on selected cards: {chosenCards.reduce((acc, card) => acc + card.value, 0)}</div>
           </div>
 
-          <div className={style.isMe}>
+          <div className={style.isMe} onClick={() => nav('/choose')}>
             <PlayerCard image={isMe.image} name={isMe.name} score={isMe.score} />
           </div>
         </div>
